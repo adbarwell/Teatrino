@@ -1,0 +1,17 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol TwoBuyerAll(reliable role P, reliable role Q, reliable role R) {
+  title(String) from P to R;
+  quote(Double) from R to P;
+  quote(Double) from R to Q;
+  split(Double) from P to Q;
+  choice at Q {
+    ok from Q to R;
+    addr(String) from Q to R;
+    date(String) from R to Q;
+
+  } or {
+    quit from Q to R;
+
+  }
+}

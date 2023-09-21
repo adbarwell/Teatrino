@@ -1,0 +1,91 @@
+
+global protocol ULog(reliable role I, role M, reliable role S) {
+  log from I to M;
+  choice at M {
+    log from M to S;
+    ack from S to M;
+    ack from M to I;
+    hb from S to I;
+  } or {
+    crash from 
+  }
+}
+
+global protocol Log(reliable role I, reliable role M, reliable role S) {
+  log from I to M;
+  log from M to S;
+  ack from S to M;
+  ack from M to I;
+  hb from S to I;
+}
+
+global protocol ULog(reliable role I, role M, reliable role S) {
+  log from I to M;
+  choice at M {
+    log from M to S;
+    ack from S to M;
+    choice at M {
+      ack from M to I;
+      choice at M {
+        hb from M to S;
+        hb from S to M;
+      } or {
+        crash from M to S;
+        log from I to S;
+        ack from S to I;
+      }
+    } or {
+      crash from M to I;
+      crash from M to S;
+      log from I to S;
+      ack from S to I;
+    }
+  } or {
+    crash from M to S;
+    crash from M to I;
+    log from I to S;
+    ack from S to I;
+  }
+}
+
+global protocol ULog(reliable role I, role M, reliable role S) {
+  rec t {
+    log from I to M;
+    choice at M {
+      log from M to S;
+      ack from S to M;
+      choice at M {
+        ack from M to I;
+        choice at M {
+          hb from M to S;
+          hb from S to M;
+          continue t;
+        } or {
+          crash from S to M;
+          continue t;
+        }
+      } or {
+        crash from M to I;
+        crash from M to S;
+        log from I to S;
+        ack from S to I;
+        continue t;
+      }
+    } or {
+      crash from M to S;
+      crash from M to I;
+      log from I to S;
+      ack from S to I;
+      continue t;
+    }
+  }
+}
+
+global protocol Log(reliable role I, reliable role M, reliable role S) {
+  log from I to M;
+  log from M to S;
+  ack from S to M;
+  ack from M to I;
+  hb from M to S; // heartbeat messages to simulate consensus/synchronisation
+  hb from S to M;
+}

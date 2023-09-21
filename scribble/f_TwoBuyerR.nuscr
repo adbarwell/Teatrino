@@ -1,0 +1,58 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol TwoBuyerR(role P, role Q, reliable role R) {
+  choice at P {
+    title(String) from P to R;
+    quote(Double) from R to P;
+    quote(Double) from R to Q;
+    choice at P {
+      split(Double) from P to R;
+      choice at Q {
+        split(Double) from Q to R;
+        choice at R {
+          quit from R to P;
+          quit from R to Q;
+
+        } or {
+          ok from R to P;
+          ok from R to Q;
+          choice at Q {
+            addr(String) from Q to R;
+            date(String) from R to P;
+            date(String) from R to Q;
+
+          } or {
+            crash from Q to R;
+            recAddr from R to P;
+            choice at P {
+              addr(String) from P to R;
+              date(String) from R to P;
+
+            } or {
+              crash from P to R;
+
+            }
+          }
+        }
+      } or {
+        crash from Q to R;
+        quit from R to P;
+
+      }
+    } or {
+      crash from P to R;
+      choice at Q {
+        split(Double) from Q to R;
+        quit from R to Q;
+
+      } or {
+        crash from Q to R;
+
+      }
+    }
+  } or {
+    crash from P to R;
+    quit from R to Q;
+
+  }
+}

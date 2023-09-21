@@ -1,0 +1,57 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol OAuthSA(role Cl, reliable role A, reliable role S) {
+  choice at Cl {
+    start(Int) from Cl to S;
+    redirect(Int) from S to Cl;
+    choice at Cl {
+      login(Int) from Cl to A;
+      Authorisation(Int) from A to Cl;
+      choice at Cl {
+        password(Int) from Cl to A;
+        choice at A {
+          ko(Int) from A to Cl;
+          choice at Cl {
+            ko(Int) from Cl to S;
+            received(Int) from S to Cl;
+            quit from S to A;
+
+          } or {
+            crash from Cl to S;
+            quit from S to A;
+
+          }
+        } or {
+          ok(Int) from A to Cl;
+          choice at Cl {
+            ok(Int) from Cl to S;
+            get(Token) from S to A;
+            put(Token) from A to S;
+            put(Token) from S to Cl;
+
+          } or {
+            crash from Cl to S;
+            quit from S to A;
+
+          }
+        }
+      } or {
+        crash from Cl to A;
+        crash from Cl to S;
+        quit from S to A;
+
+      }
+    } or {
+      crash from Cl to A;
+      crash from Cl to S;
+      quit from S to A;
+
+    }
+  } or {
+    crash from Cl to S;
+    crash from Cl to A;
+    // crash from Cl to S;
+    quit from S to A;
+
+  }
+}

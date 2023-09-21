@@ -1,0 +1,28 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol LoggerAll(reliable role L, reliable role Cl, reliable role I) {
+  rec t0 {
+    pulse from L to I;
+    choice at Cl {
+      start from Cl to I;
+      start from I to L;
+      ok from I to Cl;
+      continue t0;
+    } or {
+      stop from Cl to I;
+      ok from I to Cl;
+      stop from I to L;
+
+    } or {
+      put(String) from Cl to I;
+      put(String) from I to L;
+      continue t0;
+    } or {
+      get from Cl to I;
+      get from I to L;
+      put(String) from L to I;
+      put(String) from I to Cl;
+      continue t0;
+    }
+  }
+}

@@ -1,0 +1,94 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.35.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           Teatrino
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/adbarwell/Teatrino#readme>
+homepage:       https://github.com/adbarwell/Teatrino#readme
+bug-reports:    https://github.com/adbarwell/Teatrino/issues
+author:         Adam D. Barwell
+maintainer:     Adam D. Barwell
+copyright:      2023 Adam D. Barwell
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/adbarwell/Teatrino
+
+library
+  exposed-modules:
+      BaseUtils
+      Core
+      Effpi
+      EffpiIR
+      ErrOr
+      IR
+      Parser
+      ParserUtils
+      PPrinter
+      Projection
+      Scala
+      Utils
+  other-modules:
+      Paths_Teatrino
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wno-unused-local-binds
+  build-depends:
+      base >=4.7 && <5
+    , cmdargs
+    , deepseq
+    , directory
+    , filepath
+    , list-predicate
+    , parsec
+    , pretty-simple
+    , text
+  default-language: Haskell2010
+
+executable Teatrino
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wno-unused-local-binds -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Teatrino
+    , base >=4.7 && <5
+    , cmdargs
+    , deepseq
+    , directory
+    , filepath
+    , list-predicate
+    , parsec
+    , pretty-simple
+    , text
+  default-language: Haskell2010
+
+benchmark Teatrino-bench
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Paths_Teatrino
+  hs-source-dirs:
+      benchmark
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -Wno-unused-local-binds -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Teatrino
+    , base >=4.7 && <5
+    , bytestring
+    , cassava
+    , cmdargs
+    , criterion
+    , deepseq
+    , directory
+    , filepath
+    , list-predicate
+    , parsec
+    , pretty-simple
+    , text
+  default-language: Haskell2010

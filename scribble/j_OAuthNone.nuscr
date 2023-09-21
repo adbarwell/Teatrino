@@ -1,0 +1,159 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol OAuthNone(role Cl, role A, role S) {
+  choice at Cl {
+    start(Int) from Cl to S;
+    choice at S {
+      redirect(Int) from S to Cl;
+      choice at Cl {
+        login(Int) from Cl to A;
+        choice at A {
+          Authorisation(Int) from A to Cl;
+          choice at Cl {
+            password(Int) from Cl to A;
+            choice at A {
+              ko(Int) from A to Cl;
+              choice at Cl {
+                ko(Int) from Cl to S;
+                choice at S {
+                  received(Int) from S to Cl;
+                  choice at S {
+                    quit from S to A;
+
+                  } or {
+                    crash from S to A;
+
+                  }
+                } or {
+                  crash from S to Cl;
+                  choice at S {
+                    quit from S to A;
+
+                  } or {
+                    crash from S to A;
+
+                  }
+                }
+              } or {
+                crash from Cl to S;
+                choice at S {
+                  quit from S to A;
+
+                } or {
+                  crash from S to A;
+
+                }
+              }
+            } or {
+              ok(Int) from A to Cl;
+              choice at Cl {
+                ok(Int) from Cl to S;
+                choice at S {
+                  get(Token) from S to A;
+                  choice at A {
+                    put(Token) from A to S;
+                    choice at S {
+                      put(Token) from S to Cl;
+
+                    } or {
+                      crash from S to Cl;
+
+                    }
+                  } or {
+                    crash from A to S;
+                    choice at S {
+                      fatal from S to Cl;
+
+                    } or {
+                      crash from S to Cl;
+
+                    }
+                  }
+                } or {
+                  crash from S to A;
+                  choice at S {
+                    fatal from S to Cl;
+
+                  } or {
+                    crash from S to Cl;
+
+                  }
+                }
+              } or {
+                crash from Cl to S;
+                choice at S {
+                  quit from S to A;
+
+                } or {
+                  crash from S to A;
+
+                }
+              }
+            } or {
+              crash from A to Cl;
+              choice at Cl {
+                fatal from Cl to S;
+
+              } or {
+                crash from Cl to S;
+                quit from S to A;
+
+              }
+            }
+          } or {
+            crash from Cl to A;
+            crash from Cl to S;
+            choice at S {
+              quit from S to A;
+
+            } or {
+              crash from S to A;
+
+            }
+          }
+        } or {
+          crash from A to Cl;
+          choice at Cl {
+            fatal from Cl to S;
+
+          } or {
+            crash from Cl to S;
+            quit from S to A;
+
+          }
+        }
+      } or {
+        crash from Cl to A;
+        crash from Cl to S;
+        choice at S {
+          quit from S to A;
+
+        } or {
+          crash from S to A;
+
+        }
+      }
+    } or {
+      crash from S to Cl;
+      choice at Cl {
+        fatal from Cl to A;
+
+      } or {
+        crash from Cl to A;
+        crash from S to A;
+
+      }
+    }
+  } or {
+    crash from Cl to S;
+    crash from Cl to A;
+    // crash from Cl to S;
+    choice at S {
+      quit from S to A;
+
+    } or {
+      crash from S to A;
+
+    }
+  }
+}

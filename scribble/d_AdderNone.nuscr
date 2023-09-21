@@ -1,0 +1,40 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol AdderNone(role Cl, role S) {
+  rec t0 {
+    choice at Cl {
+      hello from Cl to S;
+      choice at Cl {
+        add(Int) from Cl to S;
+        choice at Cl {
+          add(Int) from Cl to S;
+          choice at S {
+            ok(Int) from S to Cl;
+            continue t0;
+          } or {
+            crash from S to Cl;
+
+          }
+        } or {
+          crash from Cl to S;
+
+        }
+      } or {
+        quit from Cl to S;
+        choice at S {
+          quit from S to Cl;
+
+        } or {
+          crash from S to Cl;
+
+        }
+      } or {
+        crash from Cl to S;
+
+      }
+    } or {
+      crash from Cl to S;
+
+    }
+  }
+}

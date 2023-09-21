@@ -1,0 +1,50 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol CBreakerAll(reliable role S, reliable role A, reliable role R) {
+  rec t0 {
+    ping from S to R;
+    choice at R {
+      ok from R to S;
+      choice at A {
+        enquire(Query) from A to S;
+        closed from S to A;
+        enquire(Query) from S to R;
+        put(Result) from R to S;
+        put(Result) from S to A;
+        continue t0;
+      } or {
+        quit from A to S;
+        quit from S to R;
+
+      }
+    } or {
+      ko from R to S;
+      choice at A {
+        enquire(Query) from A to S;
+        choice at S {
+          open from S to A;
+          open from S to R;
+          fail from S to A;
+          continue t0;
+        } or {
+          halfOpen from S to A;
+          halfOpen from S to R;
+          enquire(Query) from S to R;
+          choice at R {
+            ko from R to S;
+            fail from S to A;
+            continue t0;
+          } or {
+            put(Result) from R to S;
+            put(Result) from S to A;
+            continue t0;
+          }
+        }
+      } or {
+        quit from A to S;
+        quit from S to R;
+
+      }
+    }
+  }
+}

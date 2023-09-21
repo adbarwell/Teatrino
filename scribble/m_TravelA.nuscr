@@ -1,0 +1,42 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol TravelA(role Cl, role S, reliable role A) {
+  rec t0 {
+    choice at Cl {
+      query(Int) from Cl to A;
+      quote(Int) from A to Cl;
+      dummy from A to S;
+      continue t0;
+    } or {
+      ok from Cl to A;
+      ok from A to S;
+      choice at Cl {
+        payment(Int) from Cl to S;
+        choice at S {
+          ack from S to Cl;
+
+        } or {
+          crash from S to Cl;
+
+        }
+      } or {
+        crash from Cl to S;
+
+      }
+    } or {
+      ko from Cl to A;
+      ko from A to S;
+      choice at Cl {
+        quit from Cl to A;
+
+      } or {
+        crash from Cl to A;
+
+      }
+    } or {
+      crash from Cl to A;
+      fatal from A to S;
+
+    }
+  }
+}

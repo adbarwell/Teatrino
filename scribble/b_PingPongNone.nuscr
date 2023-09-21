@@ -1,0 +1,19 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol PingPongAll(role P, role Q) {
+  rec t0 {
+    choice at P {
+      ping from P to Q;
+      choice at Q {
+        pong from Q to P;
+        continue t0;
+      } or {
+        crash from Q to P;
+
+      }
+    } or {
+      crash from P to Q;
+
+    }
+  }
+}

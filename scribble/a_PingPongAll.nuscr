@@ -1,0 +1,9 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol PingPongAll(reliable role P, reliable role Q) {
+  rec t0 {
+    ping from P to Q;
+    pong from Q to P;
+    continue t0;
+  }
+}

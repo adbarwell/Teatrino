@@ -1,0 +1,15 @@
+
+global protocol LessSimpleLogger(role U, reliable role L) {
+  rec t0 {
+    choice at U {
+      write(String) from U to L;
+      continue t0;
+    } or {
+      read from U to L;
+      report(Log) from L to U;
+      continue t0; 
+    } or {
+      crash from U to L;
+    }
+  }
+}

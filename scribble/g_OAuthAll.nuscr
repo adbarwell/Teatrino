@@ -1,0 +1,22 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol OAuthAll(reliable role Cl, reliable role A, reliable role S) {
+  start(Int) from Cl to S;
+  redirect(Int) from S to Cl;
+  login(Int) from Cl to A;
+  Authorisation(Int) from A to Cl;
+  password(Int) from Cl to A;
+  choice at A {
+    ko(Int) from A to Cl;
+    ko(Int) from Cl to S;
+    received(Int) from S to Cl;
+
+  } or {
+    ok(Int) from A to Cl;
+    ok(Int) from Cl to S;
+    get(Token) from S to A;
+    put(Token) from A to S;
+    put(Token) from S to Cl;
+
+  }
+}

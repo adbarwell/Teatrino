@@ -1,0 +1,17 @@
+(*# ErrorHandlingCrashBranch #*)
+
+global protocol AdderAll(reliable role Cl, reliable role S) {
+  rec t0 {
+    hello from Cl to S;
+    choice at Cl {
+      add(Int) from Cl to S;
+      add(Int) from Cl to S;
+      ok(Int) from S to Cl;
+      continue t0;
+    } or {
+      quit from Cl to S;
+      quit from S to Cl;
+
+    }
+  }
+}

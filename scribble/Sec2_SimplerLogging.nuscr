@@ -1,0 +1,12 @@
+global protocol SimplerLogging(reliable role L, role Cl, reliable role I) {
+  trigger from L to I;
+  choice at Cl {
+    read from Cl to I;
+    read from I to L;
+    report(Log) from L to I;
+    report(Log) from I to Cl;
+  } or {
+    crash from Cl to I;
+    fatal from I to L;
+  }
+}
